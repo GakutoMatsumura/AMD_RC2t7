@@ -81,10 +81,12 @@ int AMD_RaidCheck()
 					break;
 
 				if (wcsstr(drvInfo.ProviderName, L"Advanced Micro Devices")) {
-					ret = (((USHORT)(drvInfo.DriverVersion >> 48) >= 9
-						&& (USHORT)(drvInfo.DriverVersion >> 32) >= 3
-						&& (USHORT)(drvInfo.DriverVersion >> 16) >= 0
-						&& (USHORT)(drvInfo.DriverVersion) >= 266)) ? 2 : 1;
+					/*wprintf(L"%s %d.%d.%d.%d\n", pszName, (USHORT)(drvInfo.DriverVersion >> 48),
+						(USHORT)(drvInfo.DriverVersion >> 32),
+						(USHORT)(drvInfo.DriverVersion >> 16),
+						(USHORT)(drvInfo.DriverVersion));*/
+					constexpr UINT64 AMD_RC2_min_version = ((9ULL << 48) | (3ULL << 32) | (0ULL << 16) | 266ULL);//9.3.0.266
+					ret = drvInfo.DriverVersion >= AMD_RC2_min_version ? 2 : 1;
 					dwIndex = 0xFFFFFFFF;
 					break;
 				}
