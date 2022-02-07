@@ -1,0 +1,16 @@
+﻿■ AMD_RC2t7 License ■
+-----------------------
+Version 1.0.1
+
+Copyright (c) 2022 Gakuto Matsumura:弦生ささと.
+https://thilmera.com/project/AMD_RC2t7/
+mail: amd.rc2t7@gmail.com
+
+・This library was personally developed by Gakuto Matsumura:弦生ささと.
+・This library is provided without warranty. The developer does not take any responsibility for any damage caused by the use of this library. The developer is not liable for damages or any other liability.
+・This library may not be duplicated, modified, decompiled, disassembled, decrypted, or otherwise reverse engineered.
+・This library is distributed only by the developer's own copy right, and redistribution is not permitted. Binaries of this library must not be included in the distribution of software that uses this library.
+・Software that uses this library does not have to publish the source code, but it must not be intentionally malicious.
+・This library can be used with commercial software only if the license is complied with. However, you must not sell the features of this library.
+・This library does not guarantee permanent operation.
+・The above copyright notice and this license notice shall appear on all reproductions or important parts of the software and distributions that use this library.
