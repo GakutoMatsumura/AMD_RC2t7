@@ -3,9 +3,8 @@ A library that provides a function to acquire SMART information (SATA/NVMe) of A
 
 ----
 
+DLL binary, Project Page.
 https://thilmera.com/project/AMD_RC2t7/
-
-amd.rc2t7@gmail.com
 
 ----
 
