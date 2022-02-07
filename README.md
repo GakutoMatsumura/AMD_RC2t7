@@ -2,7 +2,7 @@
 A library that provides a function to acquire SMART information (SATA/NVMe) of AMD RAID developed by individuals.
 
 https://thilmera.com/project/AMD_RC2t7/
-
+amd.rc2t7@gmail.com
 
 * Be sure to put the DLL in the same directory as the executable file to be called.
 * The DLL must not be renamed.
