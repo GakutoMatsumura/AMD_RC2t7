@@ -52,7 +52,7 @@ A_AMD_RC2_GetSmartData AMD_RC2_GetSmartData = NULL;
 #pragma comment(lib, "Wintrust.lib")
 #pragma comment(lib, "Crypt32.lib")
 
-#include <setupapi.h>
+/*#include <setupapi.h>
 #pragma    comment(lib,"setupapi.lib")
 
 // ret: -1 = error, 0 = not found, 1 = version lesser, 2 = ready
@@ -81,10 +81,10 @@ int AMD_RaidCheck()
 					break;
 
 				if (wcsstr(drvInfo.ProviderName, L"Advanced Micro Devices")) {
-					/*wprintf(L"%s %d.%d.%d.%d\n", pszName, (USHORT)(drvInfo.DriverVersion >> 48),
-						(USHORT)(drvInfo.DriverVersion >> 32),
-						(USHORT)(drvInfo.DriverVersion >> 16),
-						(USHORT)(drvInfo.DriverVersion));*/
+					//wprintf(L"%s %d.%d.%d.%d\n", pszName, (USHORT)(drvInfo.DriverVersion >> 48),
+					//	(USHORT)(drvInfo.DriverVersion >> 32),
+					//	(USHORT)(drvInfo.DriverVersion >> 16),
+					//	(USHORT)(drvInfo.DriverVersion));
 					constexpr UINT64 AMD_RC2_min_version = ((9ULL << 48) | (3ULL << 32) | (0ULL << 16) | 266ULL);//9.3.0.266
 					ret = drvInfo.DriverVersion >= AMD_RC2_min_version ? 2 : 1;
 					dwIndex = 0xFFFFFFFF;
@@ -95,7 +95,7 @@ int AMD_RaidCheck()
 	}
 	SetupDiDestroyDeviceInfoList(hDevInfo);
 	return ret;
-}
+}*/
 
 
 bool DigitalSignatureCheck(wchar_t* path) {
@@ -138,6 +138,8 @@ bool DigitalSignatureCheck(wchar_t* path) {
 
 int main()
 {
+	/*
+	//no need 0b2 after
 	const int check1 = AMD_RaidCheck();
 	if (check1 <= 0) {
 		std::cout << "! AMD-RAID Not Found\n";
@@ -148,7 +150,7 @@ int main()
 		std::cout << "! AMD-RAID Version is Lesser\n";
 		(void)getchar();
 		return 0;
-	}
+	}*/
 
 	wchar_t	buffer1[261] = {}, dir1[261] = {}, buffer3[261] = {};
 
