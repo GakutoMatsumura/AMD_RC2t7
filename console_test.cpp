@@ -81,10 +81,6 @@ int AMD_RaidCheck()
 					break;
 
 				if (wcsstr(drvInfo.ProviderName, L"Advanced Micro Devices")) {
-					/*wprintf(L"%s %d.%d.%d.%d\n", pszName, (USHORT)(drvInfo.DriverVersion >> 48),
-						(USHORT)(drvInfo.DriverVersion >> 32),
-						(USHORT)(drvInfo.DriverVersion >> 16),
-						(USHORT)(drvInfo.DriverVersion));*/
 					ret = (((USHORT)(drvInfo.DriverVersion >> 48) >= 9
 						&& (USHORT)(drvInfo.DriverVersion >> 32) >= 3
 						&& (USHORT)(drvInfo.DriverVersion >> 16) >= 0
@@ -100,7 +96,6 @@ int AMD_RaidCheck()
 }
 
 
-// ret: -1 = error, 0 = not found, 1 = version lesser, 2 = ready
 bool DigitalSignatureCheck(wchar_t* path) {
 	WINTRUST_FILE_INFO FileData = { sizeof(WINTRUST_FILE_INFO) };
 	FileData.pcwszFilePath = path;
