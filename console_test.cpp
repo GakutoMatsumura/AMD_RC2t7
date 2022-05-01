@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <windows.h>
 
@@ -14,6 +13,7 @@ enum AMD_RC2_ERROR_CODE {
 	AMD_RC2_driver_version_old,
 	AMD_RC2_not_admin,
 	AMD_RC2_name_failed,
+	AMD_RC2_MAX
 };
 
 typedef struct {
@@ -52,58 +52,15 @@ A_AMD_RC2_GetSmartData AMD_RC2_GetSmartData = NULL;
 #pragma comment(lib, "Wintrust.lib")
 #pragma comment(lib, "Crypt32.lib")
 
-/*#include <setupapi.h>
-#pragma    comment(lib,"setupapi.lib")
-
 // ret: -1 = error, 0 = not found, 1 = version lesser, 2 = ready
-int AMD_RaidCheck()
-{
-	int ret = 0;
-	HDEVINFO hDevInfo = SetupDiGetClassDevsW(NULL, 0, 0, DIGCF_PRESENT | DIGCF_ALLCLASSES);
-	if (hDevInfo == INVALID_HANDLE_VALUE) return -1;
-
-	SP_DEVINFO_DATA    sDevInfo = { sizeof(SP_DEVINFO_DATA) };
-	DWORD dwIndex = 0;
-	while (dwIndex != 0xFFFFFFFF && SetupDiEnumDeviceInfo(hDevInfo, dwIndex++, &sDevInfo))
-	{
-		wchar_t pszName[200] = {};
-		DWORD dwSize = 200;
-		DWORD dwRegType = 0;
-		if (!SetupDiGetDeviceRegistryPropertyW(hDevInfo, &sDevInfo, SPDRP_DEVICEDESC, &dwRegType, (BYTE*)pszName, dwSize, &dwSize))
-		{
-			continue;
-		}
-		if (wcsstr(pszName, L"AMD-RAID Config") && SetupDiBuildDriverInfoList(hDevInfo, &sDevInfo, SPDIT_COMPATDRIVER)) {
-			for (int j = 0; ; ++j)
-			{
-				SP_DRVINFO_DATA drvInfo = { sizeof(SP_DRVINFO_DATA) };
-				if (!SetupDiEnumDriverInfoW(hDevInfo, &sDevInfo, SPDIT_COMPATDRIVER, j, &drvInfo))
-					break;
-
-				if (wcsstr(drvInfo.ProviderName, L"Advanced Micro Devices")) {
-					//wprintf(L"%s %d.%d.%d.%d\n", pszName, (USHORT)(drvInfo.DriverVersion >> 48),
-					//	(USHORT)(drvInfo.DriverVersion >> 32),
-					//	(USHORT)(drvInfo.DriverVersion >> 16),
-					//	(USHORT)(drvInfo.DriverVersion));
-					constexpr UINT64 AMD_RC2_min_version = ((9ULL << 48) | (3ULL << 32) | (0ULL << 16) | 266ULL);//9.3.0.266
-					ret = drvInfo.DriverVersion >= AMD_RC2_min_version ? 2 : 1;
-					dwIndex = 0xFFFFFFFF;
-					break;
-				}
-			}
-		}
-	}
-	SetupDiDestroyDeviceInfoList(hDevInfo);
-	return ret;
-}*/
-
-
 bool DigitalSignatureCheck(wchar_t* path) {
-	WINTRUST_FILE_INFO FileData = { sizeof(WINTRUST_FILE_INFO) };
+	constexpr auto sizeof_WINTRUST_FILE_INFO = sizeof(WINTRUST_FILE_INFO);
+	constexpr auto sizeof_WINTRUST_DATA = sizeof(WINTRUST_DATA);
+	WINTRUST_FILE_INFO FileData = { sizeof_WINTRUST_FILE_INFO };
 	FileData.pcwszFilePath = path;
 
 	GUID WVTPolicyGUID = WINTRUST_ACTION_GENERIC_VERIFY_V2;
-	WINTRUST_DATA WinTrustData = { sizeof(WinTrustData) };
+	WINTRUST_DATA WinTrustData = { sizeof_WINTRUST_DATA };
 	WinTrustData.dwUIChoice = WTD_UI_NONE;
 	WinTrustData.fdwRevocationChecks = WTD_REVOKE_NONE;
 	WinTrustData.dwUnionChoice = WTD_CHOICE_FILE;
@@ -135,23 +92,8 @@ bool DigitalSignatureCheck(wchar_t* path) {
 	return cert_chk;
 }
 
-
 int main()
 {
-	/*
-	//no need 0b2 after
-	const int check1 = AMD_RaidCheck();
-	if (check1 <= 0) {
-		std::cout << "! AMD-RAID Not Found\n";
-		(void)getchar();
-		return 0;
-	}
-	else if (check1 <= 1) {
-		std::cout << "! AMD-RAID Version is Lesser\n";
-		(void)getchar();
-		return 0;
-	}*/
-
 	wchar_t	buffer1[261] = {}, dir1[261] = {}, buffer3[261] = {};
 
 	GetModuleFileNameW(NULL, buffer1, 261);
@@ -192,7 +134,24 @@ int main()
 		return 0;
 	}
 	UINT status = AMD_RC2_Init();
-	std::cout << "DLL function: " << status << "\n";
+	if (status > AMD_RC2_ERROR_CODE::AMD_RC2_MAX)  status = AMD_RC2_ERROR_CODE::AMD_RC2_MAX;
+
+	constexpr const char* error_msg[] = {
+		"AMD_RC2_uninitial",
+		"AMD_RC2_loaded",
+		"AMD_RC2_unloaded",
+		"AMD_RC2_failed_signature",
+		"AMD_RC2_driver_not_found",
+		"AMD_RC2_cannot_open",
+		"AMD_RC2_failed_memory_alloc",
+		"AMD_RC2_offset_overflow",
+		"AMD_RC2_driver_version_old",
+		"AMD_RC2_not_admin",
+		"AMD_RC2_name_failed",
+		"AMD_RC2_unknown"
+	};
+
+	std::cout << "DLL function: " << error_msg[status] << "\n";
 
 	if (status == 1) {
 		// get smart
